@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private bool isFacingRight = true;
     private bool isGrounded = false;
+    private bool jump = false;
 
     // Reserved function. Runs only once when the object is created.
     // Used for initialization
@@ -25,7 +27,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("KeshokSivalingam_COMP305-Midterm");
+        }
     }
 
     /// <summary>
@@ -45,6 +50,12 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
+        if (Input.GetButtonDown("Jump"))
+        {
+            jump = true;
+            anim.SetBool("isJumping", true);
+        }
+
         // Check direction of the player
         if (horiz < 0 && isFacingRight)
         {
@@ -57,6 +68,11 @@ public class PlayerController : MonoBehaviour
 
         // Update Animator Information
         anim.SetFloat("Speed", Mathf.Abs(horiz));
+    }
+
+    void OnLanding ()
+    {
+        anim.SetBool("isJumping", false);
     }
 
     void OnCollisionEnter2D(Collision2D other)
